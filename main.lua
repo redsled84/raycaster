@@ -1,3 +1,6 @@
+local textures = love.image.newImageData("wolftextures.png")
+local texWidth = 64
+local texHeight = 64
 local map = {
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -24,6 +27,34 @@ local map = {
 	{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
 	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 }
+
+local buffer = {}
+for y = 1, love.graphics.getHeight() do
+	local temp = {}
+	for x = 1, love.graphics.getWidth() do
+		temp[#temp+1] = 0
+	end
+	buffer[#buffer+1] = temp
+end
+
+local texture = {}
+for i = 1, 8 do
+	local temp = {}
+	for j = 1, texWidth * texHeight do
+		temp[#temp+1] = 0
+	end
+	texture[#texture+1] = temp
+end
+
+for x = 1, texWidth do
+	for y = 1, texHeight do
+		local xorcolor = (x * 256 / texWidth) ^ (y * 256 / texHeight)
+		local ycolor = y * 256 / texHeight
+		local xycolor = y * 128 / texHiehgt + x * 128 / texWidth
+		texture[1][texWidth * y + x] = 65536 * 254 * (x ~= y and x ~= texWidth - y)
+		
+	end
+end
 
 local posX, posY = 22, 12
 local dirX, dirY = -1, 0
@@ -130,4 +161,7 @@ function love.draw()
 		end
 		love.graphics.line(x, drawStart, x, drawEnd)
 	end
+
+	love.graphics.setColor(textures:getPixel(1,1))
+	love.graphics.rectangle("fill", 0, 0, 32, 32)
 end
